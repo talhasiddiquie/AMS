@@ -86,6 +86,7 @@ const Checkin = () => {
       console.log(sessionStorage.getItem("attendaceData"), "DATA!");
 
       if (sessionStorage.getItem("attendaceData") == null) {
+        alert("Checkout Successfully");
         setFlagThree(false);
       }
       // else {
