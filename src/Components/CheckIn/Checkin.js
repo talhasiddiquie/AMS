@@ -52,7 +52,10 @@ const Checkin = () => {
   const classes = useStyles();
   const [pin, setPin] = useState("");
   const [flag, setFlag] = useState(false);
-  const [latlong, setLatLong] = useState("");
+  const [flagTwo, setFlagTwo] = useState(false);
+  const [flagThree, setFlagThree] = useState(false);
+  const [flagFour, setFlagFour] = useState(false);
+  let data = sessionStorage.getItem("attendaceData");
 
   function getLocation() {
     if (navigator.geolocation) {
@@ -70,6 +73,32 @@ const Checkin = () => {
       setFlag(true);
     }
   }
+
+  const handleCheckout = async () => {
+    var currentdate = new Date();
+    try {
+      const pinRef = db.collection("attendance").doc(JSON.parse(data)).update({
+        checkout: currentdate.getTime(),
+      });
+
+      window.sessionStorage.removeItem("attendaceData");
+
+      console.log(sessionStorage.getItem("attendaceData"), "DATA!");
+
+      if (sessionStorage.getItem("attendaceData") == null) {
+        setFlagThree(false);
+      }
+      // else {
+      //   setFlagFour(false);
+      // }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleAdminLogin = () => {
+    setFlagTwo(true);
+  };
 
   const handleLogin = async () => {
     var currentdate = new Date();
@@ -91,6 +120,11 @@ const Checkin = () => {
         " " +
         doc.data().email;
 
+      const abc = window.sessionStorage.setItem(
+        "attendaceData",
+        JSON.stringify(attendanceKey)
+      );
+
       const userDocument = await db
         .collection("attendance")
         .doc(attendanceKey)
@@ -104,6 +138,7 @@ const Checkin = () => {
           .then((e) => alert("You have CheckedIn Successfully"));
       } else {
         alert("Your attendance has already marked for today.");
+        setFlagThree(true);
       }
 
       if (doc.data() === undefined) {
@@ -117,6 +152,11 @@ const Checkin = () => {
   useEffect(() => {
     getLocation();
   }, []);
+
+  useEffect(() => {
+    console.log("RE RENDER!");
+  }, [flagThree]);
+
   return (
     <div
       style={{
@@ -127,39 +167,75 @@ const Checkin = () => {
       }}
     >
       {flag ? <Redirect push to="/noauthorize" /> : null}
+      {flagTwo ? <Redirect push to="/adminlogin" /> : null}
+      {/* {flagFour ? setFlagThree(false) : null} */}
       <Paper className={classes.paperSet} elevation={3}>
         <form className={classes.formSet} noValidate autoComplete="off">
-          {/* <Typography
-            style={{ marginBottom: "40px" }}
-            variant="h2"
-            component="h2"
-          >
-            DiPixels
-          </Typography> */}
           <img style={{ marginBottom: "30px" }} src={logo} alt="Logo" />
-
-          <Typography>
-            <h5>Employee Pin Number</h5>
-          </Typography>
-
-          <TextField
-            className={classes.textFieldWidth}
-            style={{ marginBottom: "20px" }}
-            id="outlined-basic"
-            label="Pin"
-            variant="outlined"
-            value={pin}
-            onChange={(e) => setPin(e.target.value)}
-          />
-
-          <Button
-            className={classes.loginbtn}
-            variant="contained"
-            color="primary"
-            onClick={handleLogin}
-          >
-            Login
-          </Button>
+          {flagThree ? (
+            <div>
+              <Typography>
+                <h5>Login Successfully</h5>
+              </Typography>
+              <Button
+                className={classes.loginbtn}
+                variant="contained"
+                color="primary"
+                onClick={handleCheckout}
+              >
+                Checkout
+              </Button>
+            </div>
+          ) : (
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Typography>
+                <h5>Employee Pin Number</h5>
+              </Typography>
+              <TextField
+                className={classes.textFieldWidth}
+                style={{ marginBottom: "20px" }}
+                id="outlined-basic"
+                label="Pin"
+                variant="outlined"
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+              />
+              <Button
+                className={classes.loginbtn}
+                variant="contained"
+                color="primary"
+                onClick={handleLogin}
+              >
+                Login
+              </Button>
+              <div
+                style={{
+                  marginTop: "50px",
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                <Button
+                  style={{ width: "30%", height: "50%" }}
+                  className={classes.loginbtn}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleAdminLogin}
+                >
+                  Admin Login
+                </Button>
+              </div>{" "}
+            </div>
+          )}
         </form>
       </Paper>
     </div>

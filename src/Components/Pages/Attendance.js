@@ -35,8 +35,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   table: {
-    minWidth: 550,
-    width: "500",
+    minWidth: 400,
+    width: "400",
   },
   callState: {
     left: "20px",
@@ -358,12 +358,12 @@ const Employee = () => {
                 <TableCell style={{ width: "10%", fontWeight: "600" }}>
                   Department
                 </TableCell>
-                <TableCell style={{ width: "10%", fontWeight: "600" }}>
+                {/* <TableCell style={{ width: "10%", fontWeight: "600" }}>
                   Pin
                 </TableCell>
                 <TableCell style={{ width: "10%", fontWeight: "600" }}>
                   Mac Address
-                </TableCell>
+                </TableCell> */}
                 <TableCell style={{ width: "10%", fontWeight: "600" }}>
                   Check In
                 </TableCell>
@@ -402,8 +402,8 @@ const Employee = () => {
                     </TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.department}</TableCell>
-                    <TableCell>{user.pin}</TableCell>
-                    <TableCell>{user.mac}</TableCell>
+                    {/* <TableCell>{user.pin}</TableCell>
+                    <TableCell>{user.mac}</TableCell> */}
                     <TableCell>{timeConvertIn}</TableCell>
                     <TableCell>{timeConvertOut}</TableCell>
                     <TableCell>{Math.round(min) + "h"}</TableCell>
