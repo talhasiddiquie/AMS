@@ -395,6 +395,7 @@ const Employee = () => {
                 const et = new moment(timeConvertOut);
                 var duration = moment.duration(et.diff(st));
                 var min = duration.asHours();
+                var roundHour = Math.round(min);
                 return (
                   <TableRow key={user.id}>
                     <TableCell component="th" scope="row">
@@ -406,7 +407,55 @@ const Employee = () => {
                     <TableCell>{user.mac}</TableCell> */}
                     <TableCell>{timeConvertIn}</TableCell>
                     <TableCell>{timeConvertOut}</TableCell>
-                    <TableCell>{Math.round(min) + "h"}</TableCell>
+                    <TableCell>
+                      {roundHour < 9 ? (
+                        <div
+                          style={{
+                            color: "white",
+                            backgroundColor: "red",
+                            width: "35px",
+                            height: "35px",
+                            borderRadius: "8px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          {roundHour}
+                        </div>
+                      ) : roundHour == 9 ? (
+                        <div
+                          style={{
+                            color: "white",
+                            backgroundColor: "green",
+                            width: "35px",
+                            height: "35px",
+                            borderRadius: "8px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          {roundHour}
+                        </div>
+                      ) : roundHour >= 10 ? (
+                        <div
+                          style={{
+                            color: "white",
+                            backgroundColor: "orange",
+                            width: "35px",
+                            height: "35px",
+                            borderRadius: "8px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          {roundHour}
+                        </div>
+                      ) : null}
+                    </TableCell>
+                    {/* <TableCell>{Math.round(min) + "h"}</TableCell> */}
                     {/* <TableCell align="right">
                     <IconButton aria-label="Edit">
                       <EditIcon style={{ color: "#c26d69" }} />
