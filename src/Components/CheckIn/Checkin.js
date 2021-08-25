@@ -54,7 +54,7 @@ const Checkin = () => {
   const [flag, setFlag] = useState(false);
   const [flagTwo, setFlagTwo] = useState(false);
   const [flagThree, setFlagThree] = useState(false);
-  const [flagFour, setFlagFour] = useState(false);
+
   let data = sessionStorage.getItem("attendaceData");
 
   function getLocation() {
@@ -101,7 +101,8 @@ const Checkin = () => {
     setFlagTwo(true);
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     var currentdate = new Date();
     try {
       const pinRef = db.collection("auth").doc(pin);
@@ -171,7 +172,11 @@ const Checkin = () => {
       {flagTwo ? <Redirect push to="/adminlogin" /> : null}
       {/* {flagFour ? setFlagThree(false) : null} */}
       <Paper className={classes.paperSet} elevation={3}>
-        <form className={classes.formSet} noValidate autoComplete="off">
+        <form
+          className={classes.formSet}
+          onSubmit={handleLogin}
+          autoComplete="off"
+        >
           <img style={{ marginBottom: "30px" }} src={logo} alt="Logo" />
           {flagThree ? (
             <div>
@@ -207,13 +212,16 @@ const Checkin = () => {
                 label="Pin"
                 variant="outlined"
                 value={pin}
-                onChange={(e) => setPin(e.target.value)}
+                onChange={(e) => {
+                  setPin(e.target.value);
+                  console.log(e.target.value);
+                }}
               />
               <Button
                 className={classes.loginbtn}
                 variant="contained"
                 color="primary"
-                onClick={handleLogin}
+                type="submit"
               >
                 Login
               </Button>
