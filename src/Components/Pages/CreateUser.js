@@ -193,7 +193,10 @@ const CreateUser = () => {
               onClick={formsubmit}
               className={classes.btn}
               variant="contained"
-              color="primary"
+              style={{
+                backgroundColor: "#69c9ef",
+                color: "#fff",
+              }}
             >
               Submit
             </Button>

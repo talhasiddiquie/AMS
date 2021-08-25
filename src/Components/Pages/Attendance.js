@@ -18,12 +18,12 @@ import { Typography } from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import moment from "moment";
-import Pagination from "@material-ui/lab/Pagination";
-import { IconButton } from "@material-ui/core";
-import {
-  NavigateNext as NavgateNextIcon,
-  NavigateBefore as NavigateBeforeIcon,
-} from "@material-ui/icons";
+// import Pagination from "@material-ui/lab/Pagination";
+// import { IconButton } from "@material-ui/core";
+// import {
+//   NavigateNext as NavgateNextIcon,
+//   NavigateBefore as NavigateBeforeIcon,
+// } from "@material-ui/icons";
 import { usePagination } from "use-pagination-firestore";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -316,9 +316,10 @@ const Employee = () => {
             <Button
               style={{
                 marginLeft: "10px",
+                backgroundColor: "#69c9ef",
+                color: "#fff",
               }}
               variant="contained"
-              color="primary"
               onClick={DateFilterBtn}
             >
               Search
@@ -326,9 +327,10 @@ const Employee = () => {
             <Button
               style={{
                 marginLeft: "10px",
+                backgroundColor: "#69c9ef",
+                color: "#fff",
               }}
               variant="contained"
-              color="primary"
               onClick={resetFilter}
             >
               Reset

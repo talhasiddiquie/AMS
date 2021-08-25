@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   appBar: {
+    backgroundColor: "#69c9ef",
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
@@ -154,7 +155,7 @@ export default function MiniDrawer({ children }) {
         <Divider />
         <Link
           style={{
-            background: location === "/attendance" ? "#6273c9" : "null",
+            background: location === "/attendance" ? "#69c9ef" : "null",
             color: location === "/attendance" ? "white" : "null",
           }}
           className={classes.achorDec}
@@ -162,7 +163,13 @@ export default function MiniDrawer({ children }) {
         >
           <ListItem className={classes.listItemSet}>
             <ListItemIcon>
-              <PersonIcon style={{ size: "40px" }} size={45} />
+              <PersonIcon
+                style={{
+                  size: "40px",
+                  color: location === "/attendance" ? "white" : null,
+                }}
+                size={45}
+              />
             </ListItemIcon>
             <ListItemText>Attendance</ListItemText>
           </ListItem>
@@ -170,15 +177,21 @@ export default function MiniDrawer({ children }) {
         <Divider />
         <Link
           style={{
-            background: location === "/addssid" ? "#6273c9" : "null",
-            color: location === "/addssid" ? "white" : "null",
+            background: location === "/addssid" ? "#69c9ef" : null,
+            color: location === "/addssid" ? "white" : null,
           }}
           className={classes.achorDec}
           to="/addssid"
         >
           <ListItem className={classes.listItemSet}>
             <ListItemIcon>
-              <TabletAndroidIcon size={45} />
+              <TabletAndroidIcon
+                style={{
+                  size: "40px",
+                  color: location === "/addssid" ? "white" : null,
+                }}
+                size={45}
+              />
             </ListItemIcon>
             <ListItemText>Add SSID</ListItemText>
           </ListItem>

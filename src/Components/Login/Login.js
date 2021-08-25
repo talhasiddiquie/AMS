@@ -107,7 +107,10 @@ const Login = () => {
           <Button
             className={classes.loginbtn}
             variant="contained"
-            color="primary"
+            style={{
+              backgroundColor: "#69c9ef",
+              color: "#fff",
+            }}
             onClick={handleLogin}
           >
             Login

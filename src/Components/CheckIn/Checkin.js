@@ -179,14 +179,24 @@ const Checkin = () => {
         >
           <img style={{ marginBottom: "30px" }} src={logo} alt="Logo" />
           {flagThree ? (
-            <div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "column",
+              }}
+            >
               <Typography>
-                <h5>Login Successfully</h5>
+                <h4>Login Successfully</h4>
               </Typography>
               <Button
                 className={classes.loginbtn}
                 variant="contained"
-                color="primary"
+                style={{
+                  backgroundColor: "#69c9ef",
+                  color: "#fff",
+                }}
                 onClick={handleCheckout}
               >
                 Checkout
@@ -220,7 +230,10 @@ const Checkin = () => {
               <Button
                 className={classes.loginbtn}
                 variant="contained"
-                color="primary"
+                style={{
+                  backgroundColor: "#69c9ef",
+                  color: "#fff",
+                }}
                 type="submit"
               >
                 Login
@@ -234,7 +247,12 @@ const Checkin = () => {
                 }}
               >
                 <Button
-                  style={{ width: "30%", height: "50%" }}
+                  style={{
+                    width: "30%",
+                    height: "50%",
+                    backgroundColor: "#69c9ef",
+                    color: "#fff",
+                  }}
                   className={classes.loginbtn}
                   variant="contained"
                   color="primary"
