@@ -7,6 +7,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Addssid from "./Components/Pages/Addssid";
 import { SnackbarProvider } from "notistack";
 import NoAuthorize from "./Components/NoAuthorize/NoAuthorize";
+import PrivateRoute from "./routes/PrivateRoute";
 function App() {
   return (
     <Router>
@@ -15,16 +16,20 @@ function App() {
         <Switch>
           <Route exact path="/" component={Checkin} />
           <Route exact path="/adminlogin" component={Login} />
+
           <Route exact path="/noauthorize" component={NoAuthorize} />
           <Route
             exact
             path="/attendance"
             component={() => (
-              <MiniDrawer>
-                <Employee />
-              </MiniDrawer>
+              <PrivateRoute>
+                <MiniDrawer>
+                  <Employee />
+                </MiniDrawer>
+              </PrivateRoute>
             )}
           />
+
           <Route
             exact
             path="/addssid"

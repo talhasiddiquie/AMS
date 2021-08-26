@@ -121,6 +121,7 @@ const Employee = () => {
   };
 
   const resetFilter = (e) => {
+    setRenderTodayFilter(!renderTodayFilter);
     setRenderFilter(!renderfilter);
     setStartDate("");
     setEndDate("");

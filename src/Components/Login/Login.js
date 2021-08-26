@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import logo from "../Assets/logo.png";
-import fire, { auth } from "../Firebase/Fire";
+import { auth } from "../Firebase/Fire";
 import { Redirect } from "react-router-dom";
+import { useSnackbar } from "notistack";
 require("firebase/auth");
 const useStyles = makeStyles((theme) => ({
   paperSet: {
@@ -53,16 +53,21 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [flag, setFlag] = useState(false);
-
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const handleLogin = () => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
         console.log(user);
+        const userData = window.sessionStorage.setItem(
+          "userData",
+          JSON.stringify(user)
+        );
+        enqueueSnackbar("Login Successfully", { variant: "success" });
         setFlag(true);
       })
       .catch((err) => {
-        console.log(err);
+        enqueueSnackbar("Error", err, { variant: "error" });
       });
   };
 
@@ -78,13 +83,6 @@ const Login = () => {
       {flag ? <Redirect push to="/attendance" /> : null}
       <Paper className={classes.paperSet} elevation={3}>
         <form className={classes.formSet} noValidate autoComplete="off">
-          {/* <Typography
-            style={{ marginBottom: "40px" }}
-            variant="h2"
-            component="h2"
-          >
-            DiPixels
-          </Typography> */}
           <img style={{ marginBottom: "30px" }} src={logo} alt="Logo" />
           <TextField
             className={classes.textFieldWidth}

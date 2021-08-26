@@ -7,7 +7,8 @@ import Button from "@material-ui/core/Button";
 import logo from "../Assets/logo.png";
 import { db } from "../Firebase/Fire";
 import { Redirect } from "react-router-dom";
-require("firebase/auth");
+import { useSnackbar } from "notistack";
+
 const useStyles = makeStyles((theme) => ({
   paperSet: {
     display: "flex",
@@ -54,7 +55,7 @@ const Checkin = () => {
   const [flag, setFlag] = useState(false);
   const [flagTwo, setFlagTwo] = useState(false);
   const [flagThree, setFlagThree] = useState(false);
-
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   let data = sessionStorage.getItem("attendaceData");
 
   function getLocation() {
@@ -86,7 +87,10 @@ const Checkin = () => {
       console.log(sessionStorage.getItem("attendaceData"), "DATA!");
 
       if (sessionStorage.getItem("attendaceData") == null) {
-        alert("Checkout Successfully");
+        enqueueSnackbar("Checkout Successfully", {
+          variant: "success",
+        });
+
         setFlagThree(false);
       }
       // else {
@@ -137,9 +141,15 @@ const Checkin = () => {
           .collection("attendance")
           .doc(attendanceKey)
           .set(setAttendance)
-          .then((e) => alert("You have CheckedIn Successfully"));
+          .then((e) =>
+            enqueueSnackbar("You have CheckedIn Successfully", {
+              variant: "success",
+            })
+          );
       } else {
-        alert("Your attendance has already marked for today.");
+        enqueueSnackbar("Your attendance has already marked for today.", {
+          variant: "info",
+        });
         setFlagThree(true);
       }
 
@@ -188,7 +198,7 @@ const Checkin = () => {
               }}
             >
               <Typography>
-                <h4>Login Successfully</h4>
+                <h4>Checkin Successfully</h4>
               </Typography>
               <Button
                 className={classes.loginbtn}
