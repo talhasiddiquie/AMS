@@ -91,6 +91,7 @@ const Employee = () => {
   const [selectDepartment, setSelectDepartment] = useState([]);
   const [department, setDepartment] = useState("");
   const [renderfilter, setRenderFilter] = useState(false);
+  const [renderTodayFilter, setRenderTodayFilter] = useState(false);
   const [searchFilter, setSearchFilter] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -125,7 +126,9 @@ const Employee = () => {
     setEndDate("");
   };
   const handlefilter = (e) => {
-    if (e.target.value === "all") {
+    if (e.target.value === "today") {
+      setRenderTodayFilter(!renderTodayFilter);
+    } else if (e.target.value === "all") {
       setRenderFilter(!renderfilter);
     } else {
       setDepartment(e.target.value);
@@ -172,13 +175,27 @@ const Employee = () => {
     }
   };
 
+  const fetchAttendanceByToday = async () => {
+    const date = new Date();
+    const abc = date.getTime();
+    const hourToMili = 86400000;
+    const checkInCompare = abc - hourToMili;
+
+    const attendaceData = [];
+    const response = db.collection("attendance");
+    const data = await response.where("checkin", ">=", checkInCompare).get();
+    data.docs.forEach((attendace) => {
+      attendaceData.push(attendace.data());
+    });
+    setEmp(attendaceData);
+  };
+
   const fetchAttendance = async () => {
     const attendaceData = [];
     const response = db.collection("attendance");
     const data = await response.orderBy("checkin", "desc").get();
     data.docs.forEach((attendace) => {
       attendaceData.push(attendace.data());
-      // console.log(attendace.data());
     });
     setEmp(attendaceData);
   };
@@ -186,6 +203,10 @@ const Employee = () => {
   useEffect(() => {
     fetchAttendance();
   }, [renderfilter]);
+
+  useEffect(() => {
+    fetchAttendanceByToday();
+  }, [renderTodayFilter]);
 
   useEffect(() => {
     const attendaceData = [];
@@ -269,6 +290,9 @@ const Employee = () => {
               Deaprtment
             </InputLabel>
             <Select onChange={(e) => handlefilter(e)} native label="Deaprtment">
+              <option aria-label="None" value="today">
+                Today
+              </option>
               <option aria-label="None" value="all">
                 All
               </option>
