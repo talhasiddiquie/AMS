@@ -8,6 +8,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { db } from "../Firebase/Fire";
+import Divider from "@material-ui/core/Divider";
 import SearchIcon from "@material-ui/icons/Search";
 import Grid from "@material-ui/core/Grid";
 import Select from "@material-ui/core/Select";
@@ -18,6 +19,8 @@ import { Typography } from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import moment from "moment";
+import Progressbar from "../Progressbar/Progressbar";
+import "../Pages/style.css";
 // import Pagination from "@material-ui/lab/Pagination";
 // import { IconButton } from "@material-ui/core";
 // import {
@@ -172,7 +175,7 @@ const Employee = () => {
   const fetchAttendance = async () => {
     const attendaceData = [];
     const response = db.collection("attendance");
-    const data = await response.get();
+    const data = await response.orderBy("checkin", "desc").get();
     data.docs.forEach((attendace) => {
       attendaceData.push(attendace.data());
       // console.log(attendace.data());
@@ -344,8 +347,9 @@ const Employee = () => {
           justifyContent: "flex-end",
         }}
       >
-        <h4>Total Data: {emp.length}</h4>
+        <h4>Total Record: {emp.length}</h4>
       </div>
+      <Divider style={{ marginBottom: "10px", height: "2px" }} />
       <div className={classes.setAllUser}>
         <TableContainer style={{ borderRadius: "10px" }} component={Paper}>
           <Table className={classes.table} aria-label="simple table">
@@ -398,6 +402,10 @@ const Employee = () => {
                 var duration = moment.duration(et.diff(st));
                 var min = duration.asHours();
                 var roundHour = Math.round(min);
+                var percentage = (roundHour / 9) * 100;
+                if (percentage > 100) {
+                  percentage = 100;
+                }
                 return (
                   <TableRow key={user.id}>
                     <TableCell component="th" scope="row">
@@ -413,47 +421,77 @@ const Employee = () => {
                       {roundHour < 9 ? (
                         <div
                           style={{
-                            color: "white",
-                            backgroundColor: "red",
-                            width: "35px",
-                            height: "35px",
-                            borderRadius: "8px",
                             display: "flex",
-                            justifyContent: "center",
                             alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
-                          {roundHour}
+                          <div
+                            style={{
+                              color: "white",
+                              backgroundColor: "red",
+                              width: "35px",
+                              height: "35px",
+                              borderRadius: "8px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              flexDirection: "row",
+                            }}
+                          >
+                            {roundHour}
+                          </div>
+                          <Progressbar color={"red"} value={percentage} />
                         </div>
                       ) : roundHour == 9 ? (
                         <div
                           style={{
-                            color: "white",
-                            backgroundColor: "green",
-                            width: "35px",
-                            height: "35px",
-                            borderRadius: "8px",
                             display: "flex",
-                            justifyContent: "center",
                             alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
-                          {roundHour}
+                          <div
+                            style={{
+                              color: "white",
+                              backgroundColor: "green",
+                              width: "35px",
+                              height: "35px",
+                              borderRadius: "8px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              flexDirection: "row",
+                            }}
+                          >
+                            {roundHour}
+                          </div>
+                          <Progressbar color={"green"} value={percentage} />
                         </div>
                       ) : roundHour >= 10 ? (
                         <div
                           style={{
-                            color: "white",
-                            backgroundColor: "orange",
-                            width: "35px",
-                            height: "35px",
-                            borderRadius: "8px",
                             display: "flex",
-                            justifyContent: "center",
                             alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
-                          {roundHour}
+                          <div
+                            style={{
+                              color: "white",
+                              backgroundColor: "orange",
+                              width: "35px",
+                              height: "35px",
+                              borderRadius: "8px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              flexDirection: "row",
+                            }}
+                          >
+                            {roundHour}
+                          </div>
+                          <Progressbar color={"orange"} value={percentage} />
                         </div>
                       ) : null}
                     </TableCell>
