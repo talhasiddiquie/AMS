@@ -10,7 +10,6 @@ import Paper from "@material-ui/core/Paper";
 import { db } from "../Firebase/Fire";
 import Divider from "@material-ui/core/Divider";
 import SearchIcon from "@material-ui/icons/Search";
-import Grid from "@material-ui/core/Grid";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -21,13 +20,6 @@ import Button from "@material-ui/core/Button";
 import moment from "moment";
 import Progressbar from "../Progressbar/Progressbar";
 import "../Pages/style.css";
-// import Pagination from "@material-ui/lab/Pagination";
-// import { IconButton } from "@material-ui/core";
-// import {
-//   NavigateNext as NavgateNextIcon,
-//   NavigateBefore as NavigateBeforeIcon,
-// } from "@material-ui/icons";
-import { usePagination } from "use-pagination-firestore";
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -95,13 +87,7 @@ const Employee = () => {
   const [searchFilter, setSearchFilter] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [page, setPage] = useState(1);
-  const { items, isLoading, isStart, isEnd, getPrev, getNext } = usePagination(
-    db.collection("/attendance").orderBy("name"),
-    {
-      limit: 5,
-    }
-  );
+
   //DateFilter
   const DateFilterBtn = (e) => {
     const startDateConvert = moment(startDate).format("DD MMM YYYY");
@@ -123,6 +109,7 @@ const Employee = () => {
   const resetFilter = (e) => {
     setRenderTodayFilter(!renderTodayFilter);
     setRenderFilter(!renderfilter);
+    setSearchFilter("");
     setStartDate("");
     setEndDate("");
   };
@@ -221,46 +208,6 @@ const Employee = () => {
       });
   }, []);
 
-  // var first = db.collection("attendance").limit(4);
-
-  // first.get().then((documentSnapshots) => {
-  //   // Get the last visible document
-  //   var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
-  //   // console.log("last", lastVisible.data());
-  //   // console.log(documentSnapshots.docs);
-  //   console.log(lastVisible)
-
-  //   // Construct a new query starting at this document,
-  //   // get the next 25 cities.
-  //   const next = db
-  //     .collection("attendance")
-  //     .orderBy("name")
-  //     .startAfter(lastVisible)
-  //     .limit(3).get()
-
-  //     console.log("It is data ===>",next)
-  // });
-
-  const nextPage = () => {
-    var first = db.collection("department").orderBy("name").limit(4);
-    return first.get().then(function (documentSnapshots) {
-      // Get the last visible document
-      var lastVisible =
-        documentSnapshots.docs[documentSnapshots.docs.length - 1];
-      console.log("last", lastVisible);
-
-      // Construct a new query starting at this document,
-      // get the next 25 cities.
-      const next = db
-        .collection("department")
-        .orderBy("name")
-        .startAfter(lastVisible)
-        .limit(4);
-    });
-  };
-
-  const prevPage = () => {};
-
   return (
     <div>
       <div className={classes.divSetting}>
@@ -274,6 +221,7 @@ const Employee = () => {
             id="outlined-basic"
             label="Search by Name"
             variant="outlined"
+            value={searchFilter}
             onChange={(e) => handleSearch(e)}
             InputProps={{
               startAdornment: (
@@ -416,6 +364,7 @@ const Employee = () => {
               {emp.map((user, key) => {
                 const checkIn = user.checkin;
                 const checkOut = user.checkout;
+
                 const timeConvertIn = moment(checkIn).format(
                   "DD MMM YYYY hh:mm a"
                 );
@@ -431,6 +380,7 @@ const Employee = () => {
                 if (percentage > 100) {
                   percentage = 100;
                 }
+                console.log(checkOut)
                 return (
                   <TableRow key={user.id}>
                     <TableCell component="th" scope="row">
@@ -441,7 +391,9 @@ const Employee = () => {
                     {/* <TableCell>{user.pin}</TableCell>
                     <TableCell>{user.mac}</TableCell> */}
                     <TableCell>{timeConvertIn}</TableCell>
-                    <TableCell>{timeConvertOut}</TableCell>
+                    <TableCell>
+                      {checkOut == undefined ? "--" : timeConvertOut}
+                    </TableCell>
                     <TableCell>
                       {roundHour < 9 ? (
                         <div

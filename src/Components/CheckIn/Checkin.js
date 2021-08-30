@@ -8,7 +8,7 @@ import logo from "../Assets/logo.png";
 import { db } from "../Firebase/Fire";
 import { Redirect } from "react-router-dom";
 import { useSnackbar } from "notistack";
-
+import { geolocated } from "react-geolocated";
 const useStyles = makeStyles((theme) => ({
   paperSet: {
     display: "flex",
@@ -49,31 +49,63 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Checkin = () => {
+const Checkin = (props) => {
   const classes = useStyles();
   const [pin, setPin] = useState("");
   const [flag, setFlag] = useState(false);
   const [flagTwo, setFlagTwo] = useState(false);
   const [flagThree, setFlagThree] = useState(false);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [cords, setCords] = useState(props.coords);
+  const [lat, setLat] = useState(null);
+  const [lng, setLng] = useState(null);
+  const [status, setStatus] = useState(null);
+  const { enqueueSnackbar } = useSnackbar();
   let data = sessionStorage.getItem("attendaceData");
 
-  function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
+  const getLocation = () => {
+    if (!navigator.geolocation) {
+      setStatus("Geolocation is not supported by your browser");
     } else {
-      alert("Geolocation is not supported by this browser.");
+      setStatus("Locating...");
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setStatus(null);
+          setLat(position.coords.latitude);
+          setLng(position.coords.longitude);
+        },
+        () => {
+          setStatus("Unable to retrieve your location");
+        }
+      );
     }
-  }
 
-  function showPosition(position) {
-    let lat = position.coords.latitude;
-    let long = position.coords.longitude;
-    console.log(lat + "," + long + "------------------------------->");
-    if (!(lat >= 24 && lat <= 25 && long >= 67 && long <= 68)) {
-      setFlag(true);
-    }
-  }
+    // if (!(lat > 24 && lat < 26 && lng > 67 && lng < 68)) {
+    //   console.log("Authorized Location");
+    //   setFlag(true);
+    // }
+  };
+
+  // function getLocation() {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(showPosition);
+  //     alert("Unable to retrieve your location");
+  //   } else {
+  //     alert("Geolocation is not supported by this browser.");
+  //   }
+  // }
+
+  // const showPosition = async (position) => {
+  //   let latlong = position.coords.latitude + " , " + position.coords.longitude;
+  //   let lat = position.coords.latitude;
+  //   let long = position.coords.longitude;
+  //   setCords(latlong);
+  //   console.log(lat + "," + long + "------------------------------->");
+
+  //   if (!(lat > 24 + "" + lat < 26 + "" + long > 67 + "" + long < 68)) {
+  //     console.log("Authorized Location");
+  //     setFlag(true);
+  //   }
+  // };
 
   const handleCheckout = async () => {
     var currentdate = new Date();
@@ -93,9 +125,6 @@ const Checkin = () => {
 
         setFlagThree(false);
       }
-      // else {
-      //   setFlagFour(false);
-      // }
     } catch (err) {
       console.log(err);
     }
@@ -161,8 +190,9 @@ const Checkin = () => {
     }
     setPin("");
   };
-  useEffect(() => {
+  useEffect(async () => {
     getLocation();
+    setTimeout(() => {}, 2000);
   }, []);
 
   useEffect(() => {
@@ -225,6 +255,9 @@ const Checkin = () => {
               <Typography>
                 <h5>Employee Pin Number</h5>
               </Typography>
+              <Typography>
+                <h5>LatLong: {lat + "," + lng}</h5>
+              </Typography>
               <TextField
                 className={classes.textFieldWidth}
                 style={{ marginBottom: "20px" }}
@@ -279,4 +312,9 @@ const Checkin = () => {
   );
 };
 
-export default Checkin;
+export default geolocated({
+  positionOptions: {
+    enableHighAccuracy: true,
+  },
+  userDecisionTimeout: 5000,
+})(Checkin);

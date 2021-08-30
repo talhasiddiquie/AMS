@@ -76,7 +76,7 @@ const Addssid = () => {
   const [ssid, setSsid] = useState("");
   const [company, setCompany] = useState("");
   const [department, setDepartment] = useState("");
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const formsubmit = () => {
     try {
@@ -139,7 +139,6 @@ const Addssid = () => {
               className={classes.btn}
               variant="contained"
               style={{
-                
                 backgroundColor: "#69c9ef",
                 color: "#fff",
               }}
@@ -179,7 +178,6 @@ const Addssid = () => {
               className={classes.btn}
               variant="contained"
               style={{
-                
                 backgroundColor: "#69c9ef",
                 color: "#fff",
               }}
